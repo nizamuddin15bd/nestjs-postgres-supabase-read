@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { EmployeesModule } from './employees/employees.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true, // Automatically load entities from the modules
       synchronize: true, // Automatically synchronize the database schema (use with caution in production)
     }),
+    EmployeesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
