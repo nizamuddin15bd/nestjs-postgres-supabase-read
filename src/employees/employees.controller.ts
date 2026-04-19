@@ -8,9 +8,11 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { EmployeesService } from './employees.service';
 import { Employees } from './employees.entity';
+import { SupabaseAuthGuard } from 'src/auth/supabase-auth/supabase-auth.guard';
 
 @Controller('employees')
 export class EmployeesController {
@@ -21,6 +23,7 @@ export class EmployeesController {
     return this.employeeService.create(body);
   }
 
+  @UseGuards(SupabaseAuthGuard)
   @Get()
   async findAll(): Promise<Employees[]> {
     return this.employeeService.findAll();
