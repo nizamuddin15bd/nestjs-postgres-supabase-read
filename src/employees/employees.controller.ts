@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { EmployeesService } from './employees.service';
 import { Employees } from './employees.entity';
 
@@ -15,7 +25,14 @@ export class EmployeesController {
   async findAll(): Promise<Employees[]> {
     return this.employeeService.findAll();
   }
-
+  //   search employees by department
+  @Get('search')
+  async searchEmployees(
+    @Query('name') name?: string,
+    @Query('department') department?: string,
+  ): Promise<Employees[]> {
+    return this.employeeService.search({ name, department });
+  }
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<Employees> {
     return this.employeeService.findOne(id);
@@ -27,5 +44,10 @@ export class EmployeesController {
     @Body() body: Partial<Employees>,
   ): Promise<Employees> {
     return this.employeeService.update(id, body);
+  }
+
+  @Delete(':id')
+  async deletedEmployee(@Param('id') id: number): Promise<{ message: string }> {
+    return this.employeeService.delete(id);
   }
 }

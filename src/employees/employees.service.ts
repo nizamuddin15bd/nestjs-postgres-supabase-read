@@ -43,4 +43,33 @@ export class EmployeesService {
     const updated = Object.assign(employee, updatedData);
     return this.employeesRepository.save(updated);
   }
+
+  //   Delete an employee
+  async delete(id: number): Promise<{ message: string }> {
+    const result = await this.employeesRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Employee with ID ${id} not found`);
+    }
+    return { message: `Employee with ID ${id} has been successfully deleted!` };
+  }
+
+  //   Query employees by department
+  async search(filters: {
+    name?: string;
+    department?: string;
+  }): Promise<Employees[]> {
+    const query = this.employeesRepository.createQueryBuilder('employees');
+
+    if (filters.name) {
+      query.andWhere('employees.name ILIKE :name', {
+        name: `%${filters.name}%`, // nizam, nizamuddin, nizamuddin ahmed
+      });
+    }
+    if (filters.department) {
+      query.andWhere('employees.department = :dept', {
+        dept: filters.department,
+      });
+    }
+    return query.getMany();
+  }
 }
